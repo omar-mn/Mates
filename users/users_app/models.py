@@ -4,7 +4,7 @@ from django.db import transaction
 from django.utils import timezone
 
 
-
+# SUPER USER
 class UserManager(BaseUserManager):
     
     def create_user(self , email , username , password=None):
@@ -35,15 +35,15 @@ class UserManager(BaseUserManager):
         return user
 
 
-######################################################################################
-
-
 #image get
 def getProfileImageFilepath(self,filename):
     return f'users/profileImages/{self.pk}/{"profileImage.png"}'
 
 def getProfileBannerFilepath(self,filename):
     return f'users/profileBanner/{self.pk}/{"profileImage.png"}'
+
+
+# REG USER
 
 class account(AbstractBaseUser):
     

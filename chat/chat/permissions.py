@@ -1,7 +1,7 @@
 from rest_framework.permissions import BasePermission
 from Rooms.models import Room, MemberShip
 from Messages.models import Message
-
+from Rooms.models import UserSnapshot
 
 # MEMBER
 
@@ -18,13 +18,16 @@ class IsRoomMember(BasePermission):
             room = Room.objects.get(pk=room_id)
         except Room.DoesNotExist:
             return False
+        
+        user_id    = request.user.id
+        user = UserSnapshot.objects.filter(id=user_id).first()
 
         return MemberShip.objects.filter(
-            user             = request.user,
+            user             = user,
             room             = room,
             leftDate__isnull = True
         ).exists()
-    
+
 # عكس اللي فوقيها
 class IsNotRoomMember(BasePermission):
     messafe = "you are alredy a member of this room"
@@ -35,8 +38,11 @@ class IsNotRoomMember(BasePermission):
         except Room.DoesNotExist:
             return False
 
+        user_id    = request.user.id
+        user = UserSnapshot.objects.filter(id=user_id).first()
+
         return not MemberShip.objects.filter(
-            user=request.user,
+            user=user,
             room=room,
             leftDate=None
         ).exists()
@@ -57,9 +63,12 @@ class CanManageRoom(BasePermission):
             room = Room.objects.get(pk=room_id)
         except Room.DoesNotExist:
             return False
+        
+        user_id    = request.user.id
+        user = UserSnapshot.objects.filter(id=user_id).first()
 
         return MemberShip.objects.filter(
-            user             =request.user,
+            user             = user,
             room             = room,
             role__in         = ['owner', 'admin'],
             leftDate__isnull = True
@@ -81,8 +90,11 @@ class IsNotOwner(BasePermission):
         except Room.DoesNotExist:
             return False
 
+        user_id    = request.user.id
+        user = UserSnapshot.objects.filter(id=user_id).first()
+
         return not MemberShip.objects.filter(
-            user             = request.user,
+            user             = user,
             room             = room,
             role             = 'owner',
             leftDate__isnull = True
@@ -107,9 +119,12 @@ class IsMessageOwner(BasePermission):
         except (Room.DoesNotExist , Message.DoesNotExist):
             return False
 
+        user_id    = request.user.id
+        user = UserSnapshot.objects.filter(id=user_id).first()
+
         return Message.objects.filter(
             id      = message_id,
-            user    = request.user,
+            user    = user,
             room    = room,
         ).exists()
 
@@ -133,8 +148,11 @@ class CanDeleteMessage(BasePermission):
         if message.user_id == request.user.id:
             return True
 
+        user_id    = request.user.id
+        user = UserSnapshot.objects.filter(id=user_id).first()
+
         return MemberShip.objects.filter(
-            user=request.user,
+            user=user,
             room_id=room_id,
             role__in=['owner', 'admin'],
             leftDate__isnull=True

@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import Message , FeedBackMessage
-from Users.serializers import RoomUser
-
+from .models import Message , FeedBackMessage 
+from Rooms.serializers import RoomUser
+from Rooms.models import UserSnapshot
 
 class MessageSerializer(serializers.ModelSerializer):
     user = RoomUser(read_only=True)
@@ -11,7 +11,8 @@ class MessageSerializer(serializers.ModelSerializer):
         read_only_fields = ('user', 'room')
     
     def create(self, validated_data):
-        user = self.context['request'].user
+        user_id    = self.context['request'].user.id
+        user = UserSnapshot.objects.filter(id=user_id).first()
         room = self.context['Room']
         message = Message.objects.create(user = user , room = room , **validated_data)
         return message
@@ -32,6 +33,7 @@ class FeedBack(serializers.ModelSerializer):
         fields = ('id' , 'content','sent_at' , 'user')
 
     def create(self, validated_data):
-        user = self.context['request'].user
+        user_id    = self.context['request'].user.id
+        user = UserSnapshot.objects.filter(id=user_id).first()
         message = FeedBackMessage.objects.create(user = user , **validated_data)
         return message

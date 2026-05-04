@@ -1,6 +1,11 @@
-from .models import Room , MemberShip , JoinRequest
+from .models import Room , MemberShip , JoinRequest , UserSnapshot 
 from rest_framework import serializers
-from Users.serializers import RoomUser
+
+
+class RoomUser(serializers.ModelSerializer):
+    class Meta:
+        model = UserSnapshot
+        fields = ('id' , 'username' , 'avatar_url')
 
 
 # ALL ROOMS
@@ -15,11 +20,11 @@ class ViewRooms(serializers.ModelSerializer):
         fields = ('id' , 'name' , 'description' , 'category' , 'is_member' , 'private' , 'membersCount' , 'owner' ,'members')
 
     def get_is_member(self,obj):
-        user    = self.context['request'].user
-        room    = obj
+        user_id    = self.context['request'].user.id
+        user = UserSnapshot.objects.filter(id=user_id).first()
         return MemberShip.objects.filter(
             user             = user,
-            room             = room,
+            room             = obj,
             leftDate__isnull = True
         ).exists()
     
@@ -43,7 +48,8 @@ class CreateRoom(serializers.ModelSerializer):
         fields = ('id','name' , 'description' , 'category' , 'owner' , 'private')
     
     def create(self, validated_data):
-        user = self.context['request'].user
+        user_id = self.context['request'].user.id
+        user = UserSnapshot.objects.filter(id=user_id).first()
         room = Room.objects.create(owner = user , **validated_data)
         MemberShip.objects.create(user = room.owner , room = room , role = 'owner')
         return room
@@ -80,7 +86,8 @@ class Join_MS(serializers.ModelSerializer):
         read_only_fields = (['user' , 'room' , 'role'])
 
     def create(self, validated_data):
-        user = self.context['request'].user
+        user_id    = self.context['request'].user.id
+        user = UserSnapshot.objects.filter(id=user_id).first()
         room = self.context['room']
         MeS = MemberShip.objects.create(user = user , room = room , role = 'member' , **validated_data)
         return MeS

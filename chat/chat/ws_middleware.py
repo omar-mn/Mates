@@ -1,13 +1,13 @@
 from channels.db import database_sync_to_async
-from Users.models import account
+from Rooms.models import UserSnapshot
 from django.contrib.auth.models import AnonymousUser
 from rest_framework_simplejwt.tokens import AccessToken
 
 @database_sync_to_async
 def get_user(user_id):
     try:
-        return account.objects.get(id=user_id)
-    except account.DoesNotExist:
+        return UserSnapshot.objects.get(id=user_id)
+    except UserSnapshot.DoesNotExist:
         return AnonymousUser()
 
 class jwtAuth:

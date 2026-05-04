@@ -3,10 +3,10 @@ from rest_framework.decorators import permission_classes , api_view
 from rest_framework.permissions import AllowAny , IsAuthenticated
 from .serializers import CreateRoom , Join_MS ,ViewRooms , RoomMod , Request_Join , JoinedRoomsSerializer
 from rest_framework.response import Response 
-from .models import MemberShip , Room , JoinRequest
+from .models import MemberShip , Room , JoinRequest ,UserSnapshot
 from rest_framework.pagination import PageNumberPagination
 from django.utils import timezone
-from Mates.permissions import IsRoomMember , CanManageRoom , IsNotRoomMember , IsNotOwner
+from chat.permissions import IsRoomMember , CanManageRoom , IsNotRoomMember , IsNotOwner
 from rest_framework import status
 
 # ALL ROOMS
@@ -85,8 +85,14 @@ def JoinRoom(request,pk):
     except Room.DoesNotExist:
         return Response({"error" : "this room DoesNotExist ya broo"})
     
+    try:
+        user_id = request.user.id
+        user = UserSnapshot.objects.get(id=user_id)
+    except UserSnapshot.DoesNotExist:
+        return Response({"error" : "this user DoesNotExist ya broo"})
+
     if not room.private:
-        Mes = MemberShip.objects.filter(user = request.user  , room = room).first() 
+        Mes = MemberShip.objects.filter(user = user  , room = room).first() 
         if Mes:
             Mes.leftDate = None
             Mes.save()
@@ -100,11 +106,11 @@ def JoinRoom(request,pk):
             else :
                 return Response(serializer.errors)
     else :
-        joinRequest = JoinRequest.objects.filter(user = request.user , room = room , state = 'pending').first()
+        joinRequest = JoinRequest.objects.filter(user = user , room = room , state = 'pending').first()
         if joinRequest:
             return Response({"message": "you already requested to join this room"})
         else :
-            JoinRequest.objects.create(user = request.user , room = room)
+            JoinRequest.objects.create(user = user , room = room)
             return Response({"message": "join request sent"})
     
 
@@ -119,7 +125,9 @@ def LeaveRoom(request , pk):
     except Room.DoesNotExist:
         return Response({"error" : "this room DoesNotExist ya broo"})
     
-    Mes = MemberShip.objects.filter(user = request.user  , room = room).first() 
+    user_id = request.user.id
+    user = UserSnapshot.objects.filter(id=user_id).first()
+    Mes = MemberShip.objects.filter(user = user  , room = room).first() 
     if Mes:
         Mes.leftDate = timezone.now()
         Mes.save()
@@ -215,7 +223,9 @@ def DeleteRequest(request , pk):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def JoinedRooms(request):
-    rooms = MemberShip.objects.filter(user = request.user , leftDate = None)
+    user_id = request.user.id
+    user = UserSnapshot.objects.filter(id=user_id).first()
+    rooms = MemberShip.objects.filter(user = user , leftDate = None)
     serializer = JoinedRoomsSerializer(rooms , many = True)
     return Response(serializer.data)
 
@@ -225,6 +235,8 @@ def JoinedRooms(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def PendingRequestsProfile(request):
-    requests = JoinRequest.objects.filter(user = request.user , state= 'pending')
+    user_id = request.user.id
+    user = UserSnapshot.objects.filter(id=user_id).first()
+    requests = JoinRequest.objects.filter(user = user , state= 'pending')
     serializer = Request_Join(requests , many = True)
     return Response(serializer.data)

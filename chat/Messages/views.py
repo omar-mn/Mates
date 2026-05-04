@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from Rooms.models import Room
 from .serializers import MessageSerializer , ModMessageSerializer , FeedBack
 from .models import Message
-from Mates.permissions import IsMessageOwner , IsRoomMember , CanDeleteMessage
+from chat.permissions import IsMessageOwner , IsRoomMember , CanDeleteMessage
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
 
