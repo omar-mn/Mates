@@ -1,0 +1,81 @@
+services:
+
+  db-users:
+    container_name: db-users
+    image: postgres:15-alpine
+    restart: always
+    shm_size: 128mb
+    env_file:
+      - ./backend/users/.env.dev
+    ports:
+      - target: 5432
+        published: 5433
+    volumes:
+      - mates-db-users:/var/lib/postgresql/data
+      
+
+  users-service:
+    build: ./backend/users
+    image: mates-users:latest
+    command: ["/bin/sh", "./build.sh"]
+    ports:
+      - 8000:8000
+    depends_on:
+      - db-users
+    volumes:
+      - ./backend/users:/app
+
+  db-chat:
+    container_name: db-chat
+    image: postgres:15-alpine
+    restart: always
+    shm_size: 128mb
+    env_file:
+      - ./backend/chat/.env.dev
+    ports:
+      - target: 5432
+        published: 5434
+    volumes:
+      - mates-db-chat:/var/lib/postgresql/data
+      
+
+  chat-service:
+    build: ./backend/chat
+    image: mates-chat:latest
+    command: ["/bin/sh", "./build.sh"]
+    ports:
+      - 8080:8080
+    depends_on:
+      - db-chat
+    volumes:
+      - ./backend/chat:/app
+
+  redis:
+    image: redis:8-alpine
+    ports:
+      - 6379:6379
+
+  celery-users:
+    image: mates-users:latest
+    working_dir: /app
+    command: celery -A users worker -l info
+
+  celery-chat:
+    image: mates-chat:latest
+    working_dir: /app
+    command: celery -A chat worker -l info
+
+  front:
+    build: ./frontend
+    command: ["nginx", "-g", "daemon off;"]
+    image: mates-front
+    volumes:
+      - ./frontend/dist:/var/mates/dist
+      - ./frontend/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - chat-service
+      - users-service 
+
+volumes:
+  mates-db-users:
+  mates-db-chat:

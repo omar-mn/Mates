@@ -1,0 +1,27 @@
+FROM python:3.11.15-alpine3.22 AS builder
+
+WORKDIR /app
+
+RUN python -m venv /opt/venv
+
+ENV PATH="/opt/venv/bin:$PATH"
+
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
+
+
+FROM python:3.11.15-alpine3.22 AS runner
+
+WORKDIR /app
+
+COPY --from=builder /opt/venv /opt/venv
+
+ENV PATH="/opt/venv/bin:$PATH"
+
+
+COPY . .
+
+RUN chmod +x build.sh
+
+CMD ["/bin/sh", "./build.sh"]
