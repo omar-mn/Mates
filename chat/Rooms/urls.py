@@ -15,6 +15,7 @@ urlpatterns = [
     path('cancelrequest/<int:pk>/' , views.DeleteRequest),
     path('joinedrooms/' , views.JoinedRooms),
     path('pendingrequsts/' , views.PendingRequestsProfile),
+    path('test/',views.health_cheack)
 ]
 
 """
@@ -23,5 +24,5 @@ urlpatterns = [
     ==> api/rooms/              (all rooms)
     ==> api/rooms/create/       (add room)
     ==> api/rooms/modify/       (modify room)
-    ==> api/rooms/join/   (joinnnnnn)
+    ==> api/rooms/join/         (joinnnnnn)
 """

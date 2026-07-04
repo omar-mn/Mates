@@ -1,0 +1,38 @@
+
+include:
+  - ./services/front.yml
+  - ./services/users.svc.yml
+  - ./services/chat.svc.yml
+  - ./services/celery.yml
+  - .././monitoring/monitoring.yml
+
+volumes:
+  mates-db-users:
+  mates-db-chat:
+
+networks:
+  front-net:
+    driver: bridge
+
+  users-back-net:
+    driver: bridge
+    internal: true
+  
+  users-db-net:
+    driver: bridge
+    internal: true
+  
+  chat-back-net:
+    driver: bridge
+    internal: true
+
+  chat-db-net:
+    driver: bridge
+    internal: true
+
+  celery-net:
+    driver: bridge
+    internal: true
+
+  monitoring-net:
+  #  internal: true

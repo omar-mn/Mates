@@ -240,3 +240,9 @@ def PendingRequestsProfile(request):
     requests = JoinRequest.objects.filter(user = user , state= 'pending')
     serializer = Request_Join(requests , many = True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def health_cheack(request):
+    return Response({"لا داعي للسيطرة الامور تحت القلق"})
