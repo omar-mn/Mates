@@ -1,0 +1,20 @@
+name: users ci/cd pipeline
+
+on:
+  push:
+    branches:
+      - development
+      - main
+    paths:
+      - "users/**"
+
+jobs:
+
+  tesst:
+    runs-on: ubuntu-latest
+    steps:
+      - name: cheackout
+        uses: actions/cheackout@v4.2.2
+
+      - name: run tests
+        run: pytest

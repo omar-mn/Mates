@@ -44,7 +44,7 @@ def GetRoom(request,pk):
     try:
         room = Room.objects.get(pk = pk)
     except Room.DoesNotExist:
-        return Response({"error" : "this room DoesNotExist ya broo"})
+        return Response({"error" : "this room DoesNotExist ya broo"}, status=status.HTTP_404_NOT_FOUND)
     
     serializer = RoomMod(room)
     return Response(serializer.data)
