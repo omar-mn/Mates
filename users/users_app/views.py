@@ -23,4 +23,4 @@ def GetProfile(request , pk):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def healthcheck(request):
-    return (Response({"لا داعي للسيطرة الامور تحت القلق"}))
+    return (Response({"لا داعي للسيطرة الامور تحت القلق  /  بتيست الوورك فلوو"}))
