@@ -1,0 +1,23 @@
+name: users ci/cd pipeline
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+    paths:
+      - "users/**"
+
+jobs:
+
+  tesst:
+    runs-on: ubuntu-latest
+    steps:
+      - name: cheackout
+        uses: actions/checkout@v4.2.2
+
+      - name: reqs install
+        run: pip install -r users/requirements.txt
+
+      - name: run tests
+        run: pytest
