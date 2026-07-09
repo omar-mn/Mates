@@ -33,5 +33,13 @@ jobs:
       - name: reqs install
         run:  pip install -r users/requirements.txt
 
+      - name: env vars check
+        run: |
+          python3
+          import os
+          import pprint
+          pprint.pprint(dict(os.environ), width = 1)
+          exit
+
       - name: run tests
         run: cd users && pytest
