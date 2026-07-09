@@ -35,11 +35,36 @@ jobs:
 
       - name: env vars check
         run: |
-          python
-          import os
-          import pprint
-          pprint.pprint(dict(os.environ), width = 1)
-          exit
+
+          if [ -n "$SECRET_KEY" ]; then
+            echo "SECRET_KEY exists"
+          else
+            echo "SECRET_KEY missing"
+          fi
+
+          if [ -n "$POSTGRES_DB" ]; then
+            echo "POSTGRES_DB exists"
+          else
+            echo "POSTGRES_DB missing"
+          fi
+
+          if [ -n "$POSTGRES_PASSWORD" ]; then
+            echo "POSTGRES_PASSWORD exists"
+          else
+            echo "POSTGRES_PASSWORD missing"
+          fi
+
+          if [ -n "$POSTGRES_USER" ]; then
+            echo "POSTGRES_USER exists"
+          else
+            echo "POSTGRES_USER missing"
+          fi
+
+          if [ -n "$POSTGRES_USER" ]; then
+            echo "POSTGRES_USER exists"
+          else
+            echo "POSTGRES_USER missing"
+          fi
 
       - name: run tests
         run: cd users && pytest
