@@ -7,6 +7,7 @@ from datetime import timedelta
 # اااعععععععععععععع
 # تبا مخدتش بالي
 # نسيت اعدل هنا
+# الداتابيز كانت زعلانة
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
