@@ -40,4 +40,8 @@ jobs:
           username:     ${{ secrets.SSH_USER }}
           key:          ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            docker compose up --build users-service
+            echo "Connected!"
+            whoami
+            hostname
+          # script: |
+          #   docker compose up --build users-service
