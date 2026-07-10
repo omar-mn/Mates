@@ -3,7 +3,7 @@ import environ
 from pathlib import Path
 from datetime import timedelta
 
-# مجتش جمبك يعم و ربنا
+# همممم طب نجرب كدا
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
