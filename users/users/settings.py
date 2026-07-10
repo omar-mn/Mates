@@ -5,6 +5,7 @@ from datetime import timedelta
 
 # دا احنا لسة مطولين
 # كلاكيت سابع مرة
+# اعع نسيت اسم الداريكتوري
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 

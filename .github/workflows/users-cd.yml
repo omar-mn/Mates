@@ -45,4 +45,4 @@ jobs:
           ssh-keyscan -H ${{secrets.SSH_HOST}} > ~/.ssh/known_hosts
 
       - name: connect to server annd deploy
-        run: ssh ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} "cd docker && docker compose up -d --build users-service"
+        run: ssh ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} "cd mates/docker && docker compose up -d --build users-service"
