@@ -26,7 +26,9 @@ jobs:
         with:
           context: ./users/.
           push: true
-          tags: 3omar0/mates-users:${{vars.IMAGE_VERSION}}
+          tags: |
+            3omar0/mates-users:${{vars.IMAGE_VERSION}}
+            3omar0/mates-users:latest
 
       - name: Connect to Tailscale
         uses: tailscale/github-action@v3
@@ -45,4 +47,8 @@ jobs:
           ssh-keyscan -H ${{secrets.SSH_HOST}} > ~/.ssh/known_hosts
 
       - name: connect to server annd deploy
-        run: ssh ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} "cd mates/docker && docker compose up -d --build users-service"
+        run: |
+          ssh ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}}
+          cd mates/docker 
+          docker compose pull docker-service 
+          docker cmpose up -d users-service

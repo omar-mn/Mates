@@ -3,9 +3,7 @@ import environ
 from pathlib import Path
 from datetime import timedelta
 
-# دا احنا لسة مطولين
-# كلاكيت سابع مرة
-# اعع نسيت اسم الداريكتوري
+# شوية تنظيم
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
