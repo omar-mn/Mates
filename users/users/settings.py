@@ -3,12 +3,6 @@ import environ
 from pathlib import Path
 from datetime import timedelta
 
-# كومينت عشوائي عشان نتيست الزفت
-# اااعععععععععععععع
-# تبا مخدتش بالي
-# نسيت اعدل هنا
-# الداتابيز كانت زعلانة
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ENV VARS
