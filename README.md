@@ -4,7 +4,7 @@
 
 ### A Full-Stack Chat Application built to explore Production-Oriented Backend & DevOps Practices.
 
-<img src="./assets/architecture.png" width="100%">
+<img src="/assets/architecture.png" width="100%">
 
 </p>
 
@@ -71,7 +71,7 @@ Each backend service owns its own database while Redis is shared between Celery 
 
 Prometheus continuously scrapes infrastructure and application metrics while Grafana provides monitoring dashboards.
 
-<img src="./assets/mates-arch.png">
+<img src="/assets/mates-arch.png">
 
 ---
 
@@ -188,7 +188,7 @@ Django Prometheus Exporters
 - Disk Metrics
 - Container Metrics
 
-<img src="./assets/node-dashboard.png">
+<img src="/assets/node-dashboard.png">
 
 ```
 assets/node-dashboard.png
@@ -205,9 +205,9 @@ Metrics collected through **cAdvisor**
 - Network
 - File System
 
-<img src="./assets/cadvisor-dashboard-1.png">
+<img src="/assets/cadvisor-dashboard-1.png">
 
-<img src="./assets/cadvisor-dashboard-2.png">
+<img src="/assets/cadvisor-dashboard-2.png">
 
 ```
 assets/cadvisor-dashboard.png
@@ -227,7 +227,7 @@ Metrics include
 - Waiting
 - Accepted Connections
 
-<img src="./assets/nginx-dashboard.png">
+<img src="/assets/nginx-dashboard.png">
 
 ```
 assets/nginx-dashboard.png
@@ -246,7 +246,7 @@ Metrics include
 - Request Latency
 - Database Operations
 
-<img src="./assets/django-dashboard.png">
+<img src="/assets/django-dashboard.png">
 
 ```
 assets/django-dashboard.png
@@ -270,7 +270,7 @@ Deployment through SSH is already prepared inside the workflows and can be enabl
 
 ---
 
-<img src="./assets/github-actions.png">
+<img src="/assets/github-actions.png">
 
 ```
 assets/github-actions.png
@@ -314,7 +314,7 @@ ws://host/ws/chat/<room_id>/
 
 ## Login
 
-<img src="./assets/login.png">
+<img src="/assets/login.png">
 
 ```
 assets/login.png
@@ -324,7 +324,7 @@ assets/login.png
 
 ## Rooms
 
-<img src="./assets/rooms.png">
+<img src="/assets/rooms.png">
 
 ```
 assets/rooms.png
@@ -334,7 +334,7 @@ assets/rooms.png
 
 ## Chat
 
-<img src="./assets/chat.png">
+<img src="/assets/chat.png">
 
 ```
 assets/chat.png
@@ -344,7 +344,7 @@ assets/chat.png
 
 ## Profile
 
-<img src="./assets/profile.png">
+<img src="/assets/profile.png">
 
 ```
 assets/profile.png
@@ -355,7 +355,7 @@ assets/profile.png
 # 🐳 Running Locally
 
 ```bash
-git clone https://github.com/<username>/mates.git
+git clone https://github.com/omar-mn/Mates.git
 
 cd mates/docker
 
