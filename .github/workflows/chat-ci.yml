@@ -1,12 +1,12 @@
-name: users ci pipeline
+name: chat ci workflow
 
 on:
   push:
     branches:
-      - development
       - main
+      - development
     paths:
-      - "backend/users/**"
+      - "backend/chat.**"
 
 jobs:
   test:
@@ -19,7 +19,7 @@ jobs:
           POSTGRES_PASSWORD:  ${{secrets.POSTGRES_PASSWORD}}
         ports:
           - 5432:5432
-
+    
     runs-on: ubuntu-latest
     environment: prod
     env:
@@ -29,15 +29,14 @@ jobs:
       POSTGRES_PASSWORD:  ${{secrets.POSTGRES_PASSWORD}}
       DB_HOST:            ${{secrets.DB_HOST}}
       DB_PORT:            ${{secrets.DB_PORT}}
-      # EMAIL_USER:       ${{secrets.EMAIL_USER}}
-      # EMAIL_PASS:       ${{secrets.EMAIL_PASS}}
 
     steps:
-      - name: cheackout
-        uses: actions/checkout@v4.2.2
 
-      - name: reqs install
-        run:  pip install -r backend/users/requirements.txt
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: install reqs
+        run: pip install -r backend/chat/requirements.txt
 
       - name: run tests
-        run: cd users && pytest
+        run: cd backend/chat && pytest

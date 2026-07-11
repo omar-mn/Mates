@@ -1,14 +1,17 @@
 
 include:
-  #- ./services/front.yml
+  - ./services/front.yml
   - ./services/users.svc.yml
   - ./services/chat.svc.yml
   - ./services/celery.yml
-  # - .././monitoring/monitoring.yml
+  - ./services/monitor.yml
+  - ./services/exporters.yml
 
 volumes:
   mates-db-users:
   mates-db-chat:
+  grafana-storage:
+  prometheus-data:
 
 networks:
   front-net:

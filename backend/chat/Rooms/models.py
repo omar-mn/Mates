@@ -1,4 +1,5 @@
 from django.db import models
+from django_prometheus.models import ExportModelOperationsMixin
 
 def getroomImageFilepath(self,filename):
     return f'rooms/roomImages/{self.pk}/{"profileImage.png"}'
@@ -7,13 +8,13 @@ def getroombannerFilepath(self,filename):
     return f'rooms/roomBanners/{self.pk}/{"profileImage.png"}'
 
 
-class UserSnapshot(models.Model):
+class UserSnapshot(ExportModelOperationsMixin('UserSnapshot'), models.Model):
     username            = models.CharField(max_length=100)
     avatar_url          = models.URLField(null=True, blank=True)
     updated_at          = models.DateTimeField(auto_now=True)
 
 
-class Room(models.Model):
+class Room(ExportModelOperationsMixin('Room'), models.Model):
     
     class CategoryChoices(models.TextChoices):
         STUDY           = 'study'
@@ -36,7 +37,7 @@ class Room(models.Model):
         return self.name
 
 
-class MemberShip(models.Model):
+class MemberShip(ExportModelOperationsMixin('MemberShip'), models.Model):
 
     class Role(models.TextChoices):
         ADMIN           = 'admin'
@@ -58,7 +59,7 @@ class MemberShip(models.Model):
         return self.user.username + ' ' + self.role
 
 
-class JoinRequest(models.Model):
+class JoinRequest(ExportModelOperationsMixin('JoinRequest'), models.Model):
     class reqState(models.TextChoices):
         PENDING     = 'pending'
         REJECTED    = 'rejected'

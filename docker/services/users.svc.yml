@@ -6,7 +6,7 @@ services:
     image: postgres:15-alpine
 
     env_file:
-      - ../../backend/users/.env.dev
+      - ../../backend/users/.env.docker
 
     networks:
       - users-db-net
@@ -37,13 +37,14 @@ services:
     build: ../.././backend/users
     image: 3omar0/mates-users:v1.0
     command: ["/bin/sh", "./build.sh"]
-    enviroment:
-      ENV: docker
+    # enviroment:
+    #   ENV: docker
 
     networks:
       - users-back-net
       - users-db-net
       - celery-net
+      - monitoring-net
     ports:
       - 8000:8000
       

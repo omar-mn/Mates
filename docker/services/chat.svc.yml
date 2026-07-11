@@ -41,6 +41,7 @@ services:
       - chat-back-net
       - chat-db-net
       - celery-net
+      - monitoring-net
     ports:
       - 8080:8080
     volumes:

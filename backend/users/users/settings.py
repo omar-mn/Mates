@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env() 
 
-ENV = os.getenv("ENV", "local")
+ENV = os.getenv("ENV", "docker")
 
 if os.path.exists(os.path.join(BASE_DIR, f".env.{ENV}")):
     environ.Env.read_env(os.path.join(BASE_DIR, f".env.{ENV}"))
@@ -45,9 +45,13 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
+
+    # exporter
+    'django_prometheus',
 ]
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -57,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 ROOT_URLCONF = 'users.urls'
@@ -80,7 +85,7 @@ TEMPLATES = [
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django_prometheus.db.backends.postgresql",
         "NAME": env('POSTGRES_DB'),
         "USER": env('POSTGRES_USER'),
         "PASSWORD": env('POSTGRES_PASSWORD'),

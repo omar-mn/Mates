@@ -38,9 +38,13 @@ INSTALLED_APPS = [
     'Rooms',
     'Messages',
     'channels',
+
+    # exporter
+    'django_prometheus',
 ]
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -49,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
     # 'allauth.account.middleware.AccountMiddleware',
 ]
 
@@ -77,7 +82,7 @@ ASGI_APPLICATION = 'chat.asgi.application'
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django_prometheus.db.backends.postgresql",
         "NAME": env('POSTGRES_DB'),
         "USER": env('POSTGRES_USER'),
         "PASSWORD": env('POSTGRES_PASSWORD'),

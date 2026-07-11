@@ -1,0 +1,46 @@
+services:
+
+
+## PROM ##
+
+  prometheus:
+    image: prom/prometheus:main-distroless
+
+    ports:
+    - 9090:9090
+
+    volumes:
+    - ../../monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    - prometheus-data:/prometheus
+
+    networks:
+      - monitoring-net
+    # depends_on:
+    #   cadvisor:
+    #     condition: service_healthy
+
+
+## GRAFANA ##
+
+  grafana:
+    image: grafana/grafana:nightly-slim
+
+    ports:
+    - 3000:3000
+
+    volumes:
+    - grafana-storage:/var/lib/grafana
+    - ../../monitoring/grafana/provisioning:/etc/grafana/provisioning
+
+    networks:
+      - monitoring-net
+
+    #logging:
+    #  driver: none
+
+    environment:
+      GF_SERVER_ROOT_URL: http://localhost/monitor/
+      GF_SERVER_SERVE_FROM_SUB_PATH: "true"
+    # depends_on:
+    #   prometheus:
+    #     condition: service_healthy

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import  AbstractBaseUser , BaseUserManager
 from django.db import transaction
 from django.utils import timezone
+from django_prometheus.models import ExportModelOperationsMixin
 
 
 # SUPER USER
@@ -45,7 +46,7 @@ def getProfileBannerFilepath(self,filename):
 
 # REG USER
 
-class account(AbstractBaseUser):
+class account(ExportModelOperationsMixin('account'), AbstractBaseUser):
     
     #main-fields
     email                    = models.EmailField(max_length=60 , unique=True , blank=False , null=False)
