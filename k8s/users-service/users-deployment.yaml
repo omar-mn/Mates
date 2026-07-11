@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-deployment
+  labels:
+    service: users
+spec:
+  replicas: 1
+  selector: 
+    matchLabels: 
+      service: users
+  template:
+    metadata:
+      labels:
+        service: users
+    spec:
+      containers:
+      - name: users-pod
+        imagePullPolicy: Never
+        image: 3omar0/mates-users:v1.0
+        ports:
+        - containerPort: 8000

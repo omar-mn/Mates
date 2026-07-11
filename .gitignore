@@ -79,6 +79,4 @@ src/media/
 .Mates/static/
 Mates/static/
 
-.MatesFront
-MatesFront/
-
+.vscode

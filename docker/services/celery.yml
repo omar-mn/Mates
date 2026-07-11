@@ -1,0 +1,86 @@
+#== CELERY ==#
+
+services:
+  redis-svc:
+    image: redis:8-alpine
+    networks:
+      - celery-net
+    
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    
+    cpus: ${REDIS_CPU}
+    mem_limit: ${REDIS_MEM}
+    restart: unless-stopped
+
+    logging:
+      driver: local
+      options:
+        max-size: "20m"
+        max-file: "10"
+        compress: "true"
+
+  celery-users:
+    image: 3omar0/mates-users:v1.0
+    working_dir: /app
+    command: celery -A users worker -l info
+
+    networks:
+      - celery-net
+
+    depends_on:
+      redis-svc:
+        condition: service_healthy
+
+    healthcheck:
+      test: ["CMD", "celery", "-A" , "users" , "status"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    
+    cpus: ${CELERY_CPU}
+    mem_limit: ${CELERY_MEM}
+    restart: unless-stopped
+
+    logging:
+      driver: local
+      options:
+        max-size: "20m"
+        max-file: "10"
+        compress: "true"
+
+  celery-chat:
+    image: 3omar0/mates-chat:v1.0
+    working_dir: /app
+    command: celery -A chat worker -l info
+
+    networks:
+      - celery-net
+      - chat-db-net
+    
+    depends_on:
+      redis-svc:
+        condition: service_healthy
+
+    healthcheck:
+      test: ["CMD", "celery", "-A" , "chat" , "status"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    
+    cpus: ${CELERY_CPU}
+    mem_limit: ${CELERY_MEM}
+    restart: unless-stopped
+
+    logging:
+      driver: local
+      options:
+        max-size: "20m"
+        max-file: "10"
+        compress: "true"

@@ -3,8 +3,6 @@ import environ
 from pathlib import Path
 from datetime import timedelta
 
-# اعععع الكيبورد هيجيب اجلي
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ENV VARS

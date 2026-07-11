@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-deployment
+  labels:
+    service: chat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: chat
+  template:
+    metadata:
+      labels:
+        service: chat
+    spec:
+      containers:
+      - name: chat-pod
+        imagePullPolicy: Never
+        image: 3omar0/mates-chat:v1.0
+        ports:
+        - containerPort: 8080

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: postgres-users-dep
+  labels:
+    service: users-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      service: users-db
+  template:
+    metadata:
+      labels:
+        service: users-db
+    spec:
+      containers:
+      - name: postgres-db
+        image: postgres:15-alpine
+        env:
+        - name: POSTGRES_DB
+          value: mates_users
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: kirigaya_kazut0
+        ports:
+        - containerPort: 5432
