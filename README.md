@@ -4,7 +4,7 @@
 
 ### A Full-Stack Chat Application built to explore Production-Oriented Backend & DevOps Practices.
 
-<img src="/assets/architecture.png" width="100%">
+<img src="/assets/mates-arch.png" width="100%">
 
 </p>
 
