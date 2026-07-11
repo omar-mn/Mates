@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-celery-deployment
+  labels:
+    tier: celery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: celery
+  template:
+    metadata:
+      labels:
+        tier: celery
+    spec:
+      containers:
+      - name: chat-pod
+        imagePullPolicy: Never
+        image: 3omar0/mates-chat:v1.0
+        command: ["celery"]
+        args: ["-A", "chat", "worker", "-l", "info"]

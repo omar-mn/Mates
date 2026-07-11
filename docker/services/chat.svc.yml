@@ -1,0 +1,71 @@
+#== CHAT-SVC ==#
+
+services:
+  postgres-chat-svc:
+    container_name: db-chat
+    image: postgres:15-alpine
+
+    env_file:
+      - ../../backend/chat/.env.dev
+
+    networks:
+      - chat-db-net
+      - celery-net
+    volumes:
+      - mates-db-chat:/var/lib/postgresql/data
+    
+    healthcheck:
+      test: ["CMD-SHELL" , "pg_isready -U postgres"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+
+    logging:
+      driver: local
+      options:
+        max-size: "20m"
+        max-file: "10"
+        compress: "true"
+
+    cpus: ${DB_CPU}
+    mem_limit: ${DB_MEM}
+    shm_size: ${SHARED_MEM}
+    restart: unless-stopped
+
+  chat-service:
+    build: ../.././backend/chat
+    image: 3omar0/mates-chat:v1.0
+    command: ["/bin/sh", "./build.sh"]
+
+    networks:
+      - chat-back-net
+      - chat-db-net
+      - celery-net
+    ports:
+      - 8080:8080
+    volumes:
+      - ../../backend/chat:/app
+    
+    depends_on:
+      postgres-chat-svc:
+        condition: service_healthy
+      redis-svc:
+        condition: service_healthy
+    
+    healthcheck:
+      test: ["CMD" , "wget" , "-qO-" , "http://0.0.0.0:8080/api/rooms/test/"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+
+    cpus: ${CHAT_CPU}
+    mem_limit: ${CHAT_MEM}
+    restart: unless-stopped
+
+    logging:
+      driver: local
+      options:
+        max-size: "20m"
+        max-file: "10"
+        compress: "true"

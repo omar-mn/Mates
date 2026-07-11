@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-dep
+  labels: 
+    service: front
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      service: front
+  template:
+    metadata:
+      labels:
+        service: front
+    spec:
+      containers:
+      - name: front-pod
+        imagePullPolicy: Never
+        image: 3omar0/mates-front:v1.0 
+        ports:
+        - containerPort: 80

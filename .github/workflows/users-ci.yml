@@ -6,7 +6,7 @@ on:
       - dev
       - main
     paths:
-      - "users/**"
+      - "backend/users/**"
 
 jobs:
   test:

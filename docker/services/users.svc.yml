@@ -1,0 +1,73 @@
+#== USERS-SVC ==#
+
+services:
+  postgres-users-svc:
+    container_name: db-users
+    image: postgres:15-alpine
+
+    env_file:
+      - ../../backend/users/.env.dev
+
+    networks:
+      - users-db-net
+    volumes:
+      - mates-db-users:/var/lib/postgresql/data
+    ports:
+      - 8000:8000
+
+    healthcheck:
+      test: ["CMD-SHELL" , "pg_isready -U postgres"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+    
+    cpus: ${DB_CPU}
+    mem_limit: ${DB_MEM}
+    shm_size: ${SHARED_MEM}
+    restart: unless-stopped
+
+    logging:
+      driver: local
+      options:
+        max-size: "20m"
+        max-file: "5"
+        compress: "true"
+
+  users-service:
+    build: ../.././backend/users
+    image: 3omar0/mates-users:v1.0
+    command: ["/bin/sh", "./build.sh"]
+    enviroment:
+      ENV: docker
+
+    networks:
+      - users-back-net
+      - users-db-net
+      - celery-net
+    ports:
+      - 8000:8000
+      
+    # volumes:
+    #   - ../../backend/users:/app
+
+    depends_on:
+      postgres-users-svc:
+        condition: service_healthy
+
+    healthcheck:
+      test: ["CMD" , "wget" , "-qO-" , "http://0.0.0.0:8000/api/auth/test/"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+
+    cpus: ${USERS_CPU}
+    mem_limit: ${USERS_MEM}
+    restart: unless-stopped
+
+    logging:
+      driver: local
+      options:
+        max-size: "20m"
+        max-file: "10"
+        compress: "true"
