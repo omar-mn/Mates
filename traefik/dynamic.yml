@@ -1,0 +1,66 @@
+http:
+
+  # ROUTERS
+
+  routers:
+    front:
+      rule:     Host(`mates.localhost`)
+      service:  front
+      middlewares:
+        - common
+      entryPoints:
+        - nonSecure
+
+    users-svc:
+      rule:     Host(`mates.localhost`) && PathPrefix(`/api/auth/`)
+      service:  users-svc
+      middlewares:
+        - common
+      entryPoints:
+        - nonSecure
+
+    chat-svc:
+      rule:     Host(`mates.localhost`) && PathPrefix(`/api/rooms/`)
+      service:  chat-svc
+      middlewares:
+        - common
+      entryPoints:
+        - nonSecure
+
+
+  # SERVICES
+
+  services:
+    front:
+      loadBalancer:
+        servers:
+          - url: http://front:80
+
+    users-svc:
+      loadBalancer:
+        servers:
+          - url: http://users-service:8000
+
+    chat-svc:
+      loadBalancer:
+        servers:
+          - url: http://chat-service:8080
+
+
+  # MIDDLEWARES
+
+  middlewares:
+    common:
+      chain:
+        middlewares:
+          - compress
+          - ratelimit
+
+    compress:
+      compress: {}
+
+    ratelimit:
+        rateLimit:
+          average: 50
+          period: 1s
+          burst: 60

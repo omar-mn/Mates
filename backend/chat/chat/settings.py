@@ -92,6 +92,20 @@ DATABASES = {
 }
 
 
+# REDIS CACHE
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis-svc:6379/2",
+        "OPTIONS": {
+            "COMPRESSOR": "django_redis.compressors.gzip.GzipCompressor",
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+
 # CELERY
 
 CELERY_BROKER_URL = "redis://redis-svc:6379/0"
@@ -145,7 +159,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [os.environ.get("REDIS_URL", "redis://redis-svc:6379/1")],
+            "hosts": [os.environ.get("REDIS_URL", "redis://redis-svc:6379/3")],
         },
     },
 }

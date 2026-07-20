@@ -4,8 +4,9 @@ include:
   - ./services/users.svc.yml
   - ./services/chat.svc.yml
   - ./services/celery.yml
-  - ./services/monitor.yml
-  - ./services/exporters.yml
+  # - ./services/monitor.yml
+  # - ./services/exporters.yml
+  - ./services/traefik.yml
 
 volumes:
   mates-db-users:
@@ -14,12 +15,16 @@ volumes:
   prometheus-data:
 
 networks:
+  traefik-net:
+    driver: bridge
+
   front-net:
     driver: bridge
+    internal: true
 
   users-back-net:
     driver: bridge
-    #internal: true
+    internal: true
   
   users-db-net:
     driver: bridge
@@ -38,4 +43,4 @@ networks:
     internal: true
 
   monitoring-net:
-  #  internal: true
+    internal: true

@@ -1,0 +1,27 @@
+services:
+  traefik:
+    image: traefik:v3.7
+
+    # command:
+    #   - "--api.insecure=true"               # dashboard enable
+    #   - "--providers.docker=true"           # defineing the provider for traefik
+    #   - "--entrypoints.web.address=:80"     # defineing default port
+    #   - "--log.level=INFO"                  # detailed logs
+    
+    # enviroment:
+    #   DOCKER_HOST: ssh://kirito@host1.example.
+
+    networks:
+      - traefik-net
+      - front-net
+      - users-back-net
+      - chat-back-net
+    
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080" # dashboard port
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock   # access to docker socket (using docker api)
+      - ../../traefik/static.yml:/etc/traefik/traefik.yml:ro
+      - ../../traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro

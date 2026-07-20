@@ -44,7 +44,7 @@ services:
       - users-back-net
       - users-db-net
       - celery-net
-      - monitoring-net
+      # - monitoring-net
     ports:
       - 8000:8000
       
@@ -72,3 +72,16 @@ services:
         max-size: "20m"
         max-file: "10"
         compress: "true"
+
+    labels: {}
+      # - "traefik.enable=true"
+      # - "traefik.docker.network=docker_users-back-net"
+      # # Routers
+      #   - "traefik.http.routers.users-svc.rule=Host(`mates.localhost`) && PathPrefix(`/api/auth/`)"
+      #   - "traefik.http.routers.users-svc.entrypoints=nonSecure"
+      #   - "traefik.http.routers.users-svc.service=users-svc"
+      #   - "traefik.http.routers.users-svc.middlewares=test-compress"
+      # # Services
+      #   - "traefik.http.services.users-svc.loadbalancer.server.port=8000"
+      # # Middleware
+      #   - "traefik.http.middlewares.test-compress.compress=true"

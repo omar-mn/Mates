@@ -13,6 +13,9 @@ services:
       - celery-net
     volumes:
       - mates-db-chat:/var/lib/postgresql/data
+
+    # Other
+
     
     healthcheck:
       test: ["CMD-SHELL" , "pg_isready -U postgres"]
@@ -46,7 +49,7 @@ services:
       - 8080:8080
     volumes:
       - ../../backend/chat:/app
-    
+
     depends_on:
       postgres-chat-svc:
         condition: service_healthy
@@ -70,3 +73,15 @@ services:
         max-size: "20m"
         max-file: "10"
         compress: "true"
+
+    labels: {}
+      # - "traefik.enable=true"
+      # - "traefik.docker.network=docker_chat-back-net"
+      # # Routers
+      #   - "traefik.http.routers.chat-svc.rule=Host(`mates.localhost`) && PathPrefix(`/api/rooms/`)"
+      #   - "traefik.http.routers.chat-svc.entrypoints=nonSecure"
+      #   - "traefik.http.routers.chat-svc.service=chat-svc"
+      #   # - "traefik.http.routers.chat-svc.middlewares=backed"
+      # # Services
+      #   - "traefik.http.services.chat-svc.loadbalancer.server.port=8080"
+      # # Middleware

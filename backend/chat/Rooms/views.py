@@ -8,6 +8,7 @@ from rest_framework.pagination import PageNumberPagination
 from django.utils import timezone
 from chat.permissions import IsRoomMember , CanManageRoom , IsNotRoomMember , IsNotOwner
 from rest_framework import status
+from django.views.decorators.cache import cache_page
 
 # ALL ROOMS
 
@@ -39,6 +40,7 @@ def Createroom(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+@cache_page(60 * 5)  # cache layer i guess
 def GetRoom(request,pk):
 
     try:
@@ -156,6 +158,7 @@ def PendingRequests(request , pk):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated , CanManageRoom])
+@cache_page(60 * 10)  # cache layer i guess
 def OldRequests(request,pk):
 
     try:
