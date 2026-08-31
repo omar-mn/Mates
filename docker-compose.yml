@@ -1,0 +1,72 @@
+
+include:
+
+  ## PROXY ##
+  - ./traefik/traefik.yml
+
+  ## APP ##
+  - ./docker/app/front.yml
+  - ./docker/app/users.svc.yml
+  # - ./docker/app/chat.svc.yml
+  # - ./docker/app/celery.yml
+
+  ## MONITOR ##
+  - ./monitoring/monitor.yml
+  #- ./monitoring/exporters.yml
+
+  ## DB && FIALOVER ##
+  - ./docker/DB/etcd.yml
+  - ./docker/DB/HAproxy.yml
+  - ./docker/DB/databasuse.yml
+  - ./docker/DB/patroni/patroni.yml
+
+volumes:
+
+  ## MONITOR ##
+  grafana-storage:
+  prometheus-data:
+
+  ## DB ##
+  # mates-db-users:
+  # mates-db-chat:
+  patroni-1-data: 
+  patroni-2-data: 
+  patroni-3-data: 
+
+networks:
+
+  ## APP ##
+  traefik-net:
+    driver: bridge
+
+  front-net:
+    driver: bridge
+    internal: true
+
+  users-back-net:
+    driver: bridge
+    internal: true
+  
+  chat-back-net:
+    driver: bridge
+    internal: true
+
+  celery-net:
+    driver: bridge
+    internal: true
+
+  ## MONITOR ##
+  monitoring-net:
+    internal: false
+
+  ## DB ##
+  pg-failover:
+    internal: false
+  
+  # users-db-net:
+  #   driver: bridge
+  #   internal: true
+
+  # chat-db-net:
+  #   driver: bridge
+  #   internal: true

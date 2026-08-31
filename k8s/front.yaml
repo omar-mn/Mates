@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-service
+  labels:
+    service: front
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30080
+  type: NodePort
+  selector:
+    service: front
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-dep
+  labels: 
+    service: front
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      service: front
+  template:
+    metadata:
+      labels:
+        service: front
+    spec:
+      containers:
+      - name: front-pod
+        # imagePullPolicy: Never
+        image: 3omar0/mates-front:latest 
+        ports:
+        - containerPort: 80

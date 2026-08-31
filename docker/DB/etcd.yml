@@ -1,0 +1,42 @@
+x-common-etcd: &etcd-svc
+  image: gcr.io/etcd-development/etcd:v3.5.11
+  entrypoint: ["/usr/local/bin/etcd"]
+  command:
+    - --data-dir=/etcd-data
+    - --listen-client-urls=http://0.0.0.0:2379
+    - --listen-peer-urls=http://0.0.0.0:2380
+    - --initial-cluster=etcd1=http://etcd1:2380,etcd2=http://etcd2:2380,etcd3=http://etcd3:2380
+    - --initial-cluster-token=etcd-cluster
+    - --initial-cluster-state=new
+    - --log-level=warn
+  restart: unless-stopped
+  networks: [pg-failover]
+
+services:
+  etcd1:
+    <<: *etcd-svc
+    hostname: etcd1
+    container_name: etcd1
+    environment:
+      ETCD_NAME: etcd1
+      ETCD_INITIAL_ADVERTISE_PEER_URLS: http://etcd1:2380
+      ETCD_ADVERTISE_CLIENT_URLS: http://etcd1:2379
+    ports: ["2379:2379"]  # expose one client port to host
+
+  etcd2:
+    <<: *etcd-svc
+    hostname: etcd2
+    container_name: etcd2
+    environment:
+      ETCD_NAME: etcd2
+      ETCD_INITIAL_ADVERTISE_PEER_URLS: http://etcd2:2380
+      ETCD_ADVERTISE_CLIENT_URLS: http://etcd2:2379
+
+  etcd3:
+    <<: *etcd-svc
+    hostname: etcd3
+    container_name: etcd3
+    environment:
+      ETCD_NAME: etcd3
+      ETCD_INITIAL_ADVERTISE_PEER_URLS: http://etcd3:2380
+      ETCD_ADVERTISE_CLIENT_URLS: http://etcd3:2379

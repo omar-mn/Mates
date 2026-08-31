@@ -1,0 +1,36 @@
+services:
+
+  patroni1:
+    image: dhi.io/patroni:4-pg18
+    container_name: patroni-1
+    command: /etc/patroni/config.yml
+    volumes:
+      - ./config-1.yml:/etc/patroni/config.yml
+      - patroni-1-data:/var/lib/postgresql/data
+    networks: [pg-failover]
+    ports:
+      - 8001:8008
+
+
+  patroni2:
+    image: dhi.io/patroni:4-pg18
+    container_name: patroni-2
+    command: /etc/patroni/config.yml
+    volumes:
+      - ./config-2.yml:/etc/patroni/config.yml
+      - patroni-2-data:/var/lib/postgresql/data
+    networks: [pg-failover]
+    ports:
+      - 8002:8008
+
+
+  patroni3:
+    image: dhi.io/patroni:4-pg18
+    container_name: patroni-3
+    command: /etc/patroni/config.yml
+    volumes:
+      - ./config-3.yml:/etc/patroni/config.yml
+      - patroni-3-data:/var/lib/postgresql/data
+    networks: [pg-failover]
+    ports:
+      - 8003:8008
