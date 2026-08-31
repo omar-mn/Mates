@@ -4,7 +4,7 @@ http:
 
   routers:
     front:
-      rule:     Host(`mates.localhost`)
+      rule:     Host(`localhost`)
       service:  front
       middlewares:
         - common
@@ -12,7 +12,7 @@ http:
         - nonSecure
 
     users-svc:
-      rule:     Host(`mates.localhost`) && PathPrefix(`/api/auth/`)
+      rule:     Host(`localhost`) && PathPrefix(`/api/auth/`)
       service:  users-svc
       middlewares:
         - common
@@ -20,13 +20,24 @@ http:
         - nonSecure
 
     chat-svc:
-      rule:     Host(`mates.localhost`) && PathPrefix(`/api/rooms/`)
+      rule:     Host(`localhost`) && PathPrefix(`/api/rooms/`)
       service:  chat-svc
       middlewares:
         - common
       entryPoints:
         - nonSecure
 
+    grafana:
+      rule:     Host(`localhost`) && PathPrefix(`/monitor/`)
+      service:  grafana
+      entryPoints:
+        - nonSecure
+
+    basuse:
+      rule:     Host(`localhost`) && PathPrefix(`/basuse/`)
+      service:  basuse
+      entryPoints:
+        - nonSecure
 
   # SERVICES
 
@@ -45,6 +56,16 @@ http:
       loadBalancer:
         servers:
           - url: http://chat-service:8080
+
+    grafana:
+      loadBalancer:
+        servers:
+          - url: http://grafana:3000
+
+    basuse:
+      loadBalancer:
+        servers:
+          - url: http://databasus:4005
 
 
   # MIDDLEWARES

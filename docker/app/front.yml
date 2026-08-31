@@ -1,0 +1,50 @@
+#== FRONT ==#
+
+services:
+  front:
+    build: ../.././frontend
+    command: ["nginx", "-g", "daemon off;"]
+    image: 3omar0/mates-front:v1.0
+
+    networks:
+      - front-net
+    
+    volumes:
+      # - ../../frontend/dist:/var/mates/dist
+      - ../../frontend/nginx.conf:/etc/nginx/nginx.conf
+
+    depends_on:
+      # chat-service:
+      #   condition: service_healthy
+      users-service:
+        condition: service_healthy
+
+    healthcheck:
+      test: ["CMD" , "curl" , "-f" , "http://localhost:80/"]
+      interval: 1m
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+    cpus: ${FRONT_CPU}
+    mem_limit: ${FRONT_MEM}
+    restart: unless-stopped
+
+    logging:
+      driver: local
+      options:
+        max-size: "20m"
+        max-file: "10"
+        compress: "true"
+
+    labels: {}
+      # - "traefik.enable=true"
+      # # Routers
+      #   - "traefik.http.routers.mates.rule=Host(`mates.localhost`)"      
+      #   - "traefik.http.routers.mates.entrypoints=nonSecure"
+      #   - "traefik.http.routers.mates.service=mates"
+      #   - "traefik.http.routers.mates.middlewares=compress"
+      # # Services
+      #   - "traefik.http.services.mates.loadbalancer.server.port=80"
+      # # Middleware
+      #   - "traefik.http.middlewares.compress.compress=true"

@@ -1,0 +1,14 @@
+services:
+
+  haproxy:
+    image: haproxy:3.0.26-alpine
+    container_name: haproxy
+
+    networks:
+      - pg-failover
+      - users-back-net
+      - chat-back-net
+    ports:
+      - 5432:5432
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro

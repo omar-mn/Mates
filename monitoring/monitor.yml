@@ -1,0 +1,61 @@
+services:
+
+## GRAFANA ##
+
+  grafana:
+    image: grafana/grafana:nightly-slim
+    ports:
+    - 3000:3000
+    volumes:
+    - grafana-storage:/var/lib/grafana
+    - ./grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - monitoring-net
+    environment:
+      GF_SERVER_ROOT_URL: http://localhost/monitor/
+      GF_SERVER_SERVE_FROM_SUB_PATH: "true"
+    # depends_on:
+    #   prometheus:
+    #     condition: service_healthy
+
+
+## PROM ##
+
+  prometheus:
+    image: prom/prometheus:main-distroless
+    ports:
+    - 9090:9090
+    volumes:
+    - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    - prometheus-data:/prometheus
+    networks:
+      - monitoring-net
+    # depends_on:
+    #   cadvisor:
+    #     condition: service_healthy
+
+
+## LOKI ##
+
+  loki:
+    image: grafana/loki:3.6.11
+    volumes:
+      - ./loki/loki-config.yml:/etc/loki/loki-config.yml
+    ports:
+      - 3100:3100
+    command: -config.file=/etc/loki/loki-config.yml
+    networks:
+      - monitoring-net
+
+## PROMTAIL ##
+
+  promtail:
+    image: grafana/promtail:3.6.11
+    volumes:
+      - /var/log:/var/log
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./loki/promtail-config.yml:/etc/loki/promtail-config.yml
+      # - /home/omar-v/
+    command: -config.file=/etc/loki/promtail-config.yml
+    networks:
+      - monitoring-net
