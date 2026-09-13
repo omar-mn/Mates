@@ -2,16 +2,15 @@ apiVersion: v1
 kind: Service
 metadata:
   name: front-service
+  namespace: mates-app
   labels:
     service: front
 spec:
+  selector:
+    service: front
   ports:
     - port: 80
       targetPort: 80
-      nodePort: 30080
-  type: NodePort
-  selector:
-    service: front
 
 ---
 
@@ -19,11 +18,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: front-dep
-  labels: 
+  namespace: mates-app
+  labels:
     service: front
 spec:
   replicas: 1
-  selector: 
+  selector:
     matchLabels:
       service: front
   template:
@@ -33,7 +33,6 @@ spec:
     spec:
       containers:
       - name: front-pod
-        # imagePullPolicy: Never
         image: 3omar0/mates-front:latest 
         ports:
         - containerPort: 80
