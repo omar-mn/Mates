@@ -1,0 +1,7 @@
+commonLabels:
+    app: mates
+resources:
+  - front.yaml
+  - users-service/users.yaml
+  - users-service/postgres.yaml
+  - secrets/users.yml
