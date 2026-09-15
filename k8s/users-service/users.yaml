@@ -34,3 +34,39 @@ spec:
         image: 3omar0/mates-users:v1.0
         ports:
         - containerPort: 8000
+        env:
+          - name: SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                - name: users-secret
+                  key: secret_key
+
+          - name: POSTGRES_DB
+            valueFrom:
+              secretKeyRef:
+                - name: users-secret
+                  key: postgres_db
+
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                - name: users-secret
+                  key: postgres_user
+
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                - name: users-secret
+                  key: postgres_password
+
+          - name: DB_HOST
+            valueFrom:
+              secretKeyRef:
+                - name: users-secret
+                  key: db_host
+
+          - name: DB_PORT
+            valueFrom:
+              secretKeyRef:
+                - name: users-secret
+                  key: db_port

@@ -3,4 +3,4 @@ kind: GatewayClass
 metadata:
   name: mates-app-class
 spec:
-  controllerName: io.cilium/gateway-controller
+  controllerName: traefik.io/gateway-controller
