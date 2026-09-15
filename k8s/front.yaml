@@ -21,6 +21,7 @@ metadata:
   namespace: mates-app
   labels:
     service: front
+
 spec:
   replicas: 1
   selector:
