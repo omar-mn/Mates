@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: users-celery-deployment
+  namespace: mates-app
   labels:
     tier: celery
 spec:
@@ -16,7 +17,6 @@ spec:
     spec:
       containers:
       - name: users-pod
-        imagePullPolicy: Never
         image: 3omar0/mates-users:v1.0
         command: ["celery"]
         args: ["-A", "users", "worker", "-l", "info"]

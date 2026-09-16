@@ -32,7 +32,6 @@ spec:
     spec:
       containers:
       - name: users-pod
-        imagePullPolicy: Never
         image: 3omar0/mates-users:v1.0
         ports:
         - containerPort: 8000
@@ -72,3 +71,9 @@ spec:
               secretKeyRef:
                   name: users-secret
                   key: db_port
+
+      initContainers:
+      - name: celery-pod
+        image: 3omar0/mates-users:v1.0
+        command: ["celery"]
+        args: ["-A", "users", "worker", "-l", "info"]
